@@ -12,7 +12,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <sonar.projectKey>demo:java-security</sonar.projectKey>
+    <sonar.organization>fabien-martin-sonarsource</sonar.organization>
+    <sonar.projectKey>fabien-martin-sonarsource_demo-java-security</sonar.projectKey>
     <sonar.projectName>Java Web App</sonar.projectName>
   </properties>
   <dependencies>
