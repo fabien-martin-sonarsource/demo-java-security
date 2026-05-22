@@ -30,3 +30,6 @@ java-security.iml
 
 # local Files
 scanner-maven.sh
+
+# MCP config with secrets
+.mcp.json
