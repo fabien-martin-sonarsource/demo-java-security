@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
+import java.util.ArrayList;
 
 public class Utils {
 
@@ -48,5 +49,9 @@ public class Utils {
         GCMParameterSpec gcmSpec = new GCMParameterSpec(128, nonce);
 
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec); // Noncompliant
+    }
+
+    public static int computeSize(ArrayList<String> list){
+        return list.size();
     }
 }

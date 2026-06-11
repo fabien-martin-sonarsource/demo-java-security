@@ -2,6 +2,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fabien-martin-sonarsource_demo-java-security&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fabien-martin-sonarsource_demo-java-security)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fabien-martin-sonarsource_demo-java-security&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fabien-martin-sonarsource_demo-java-security)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fabien-martin-sonarsource_demo-java-security&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fabien-martin-sonarsource_demo-java-security)
+
 ## Use case
 This example demonstrates:
 - Vulnerabilities
@@ -26,3 +27,14 @@ At the bottom of the class you see a bunch of methods that demonstrate custom in
 - The method with custom sanitization (`doSomethingSanitized()`) has no vulnerability
 
 The custom security configuration file is in the root directory [here](s3649JavaSqlInjectionConfig.json)
+
+ ## Agents
+
+```sh
+
+# CLI
+sonar analyze secrets *
+
+# MCP
+claude --resume security-vulnerabilities-review
+```
