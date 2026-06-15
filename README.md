@@ -35,6 +35,9 @@ The custom security configuration file is in the root directory [here](s3649Java
 # CLI
 sonar analyze secrets *
 
+# AC/DC
+claude --resume "secret-detection-hook"
+
 # MCP
 claude --resume security-vulnerabilities-review
 ```
