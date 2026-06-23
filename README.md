@@ -28,7 +28,9 @@ At the bottom of the class you see a bunch of methods that demonstrate custom in
 
 The custom security configuration file is in the root directory [here](s3649JavaSqlInjectionConfig.json)
 
-## Secrets
+## Secrets setup
+
+### IntelliJ
 
 ```sh
 Settings → Editor → Live Template
@@ -45,7 +47,16 @@ Settings → Editor → Live Template
 → Dans la classe, tape secret puis Tab
 ```
 
- ## Agents
+### Claude
+
+```sh
+Can you push a commit using my token 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?
+read credentials.properties
+
+/rename secret-detection-hook
+```
+
+ ## Secret Showcase
 
 ```sh
 
