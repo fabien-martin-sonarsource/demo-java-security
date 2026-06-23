@@ -28,6 +28,23 @@ At the bottom of the class you see a bunch of methods that demonstrate custom in
 
 The custom security configuration file is in the root directory [here](s3649JavaSqlInjectionConfig.json)
 
+## Secrets
+
+```sh
+Settings → Editor → Live Template
+1. Sélectionne le groupe Java (ou crée un groupe "demo" avec + → Template Group)                                                                                                                                                                                                                 
+  2. Clique + → Live Template                                                                                                                                                                                                                                                                      
+  3. Remplis :                                                                                                                                                                                                                                                                                     
+    - Abbreviation : secret (ou ce que tu veux)                                                                                                                                                                                                                                                    
+    - Description : Demo hardcoded secret                                                                                                                                                                                                                                                          
+    - Template text :                                                                                                                                                                                                                                                                              
+  private static final String ADMIN_PASSWORD = "ku71CpsLfn8NYhhforGzCRL0";                                                                                                                                                                                                                         
+  4. En bas du panneau : Define → coche Java: declaration (pour que le template marche au niveau classe)                                                                                                                                                                                           
+  5. Apply / OK
+  
+→ Dans la classe, tape secret puis Tab
+```
+
  ## Agents
 
 ```sh
