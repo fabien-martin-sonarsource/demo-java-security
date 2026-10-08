@@ -53,6 +53,7 @@ jobs:
         mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
         -Dmaven.test.failure.ignore=true \
         -Dsonar.maven.scanAll=True \
+        -Dsonar.secrets.disableTestFileDetection=true \
         -Dsonar.organization=$SONAR_ORGANIZATION \
         -Dsonar.projectKey=$SONAR_PROJECT_KEY
 
