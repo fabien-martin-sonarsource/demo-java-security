@@ -62,10 +62,12 @@ read credentials.properties
 
 # CLI
 sonar analyze secrets *
+sonar analyze dependency-risks
 
 # AC/DC
 claude --resume "secret-detection-hook"
 
 # MCP
 claude --resume security-vulnerabilities-review
+
 ```
