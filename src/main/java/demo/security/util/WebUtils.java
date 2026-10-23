@@ -34,7 +34,6 @@ public class WebUtils {
             // ignore
         }
 
-        System.out.println("Generated remember-me token for " + username + ": " + token);
         LAST_REMEMBER_ME_TOKEN = token;
 
         Cookie cookie = new Cookie("remember_me", token);
