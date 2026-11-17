@@ -8,8 +8,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
+import java.io.ObjectStreamClass;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -23,14 +26,20 @@ public class UserServlet extends HttpServlet {
             List<String> users = db.findUsers(user);
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            users.forEach((result) -> {
-                        out.print("<h2>User "+result+ "</h2>");
-            });
+            users.forEach(result -> out.print("<h2>User " + result + "</h2>"));
             out.close();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            sendInternalError(response);
         }
 
+    }
+
+    private static void sendInternalError(HttpServletResponse response) {
+        try {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to process request");
+        } catch (IOException ioe) {
+            // The response could not be written to; nothing more to do here.
+        }
     }
 
     private SessionHeader getSessionHeader(HttpServletRequest request) {
@@ -38,13 +47,32 @@ public class UserServlet extends HttpServlet {
         if (sessionAuth != null) {
             try {
                 byte[] decoded = Base64.decodeBase64(sessionAuth);
-                ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(decoded));
+                ObjectInputStream in = new SessionHeaderObjectInputStream(new ByteArrayInputStream(decoded));
                 return (SessionHeader) in.readObject();
             } catch (Exception e) {
                 return null;
             }
         }
         return null;
+    }
+
+    /**
+     * Restricts deserialization to the {@link SessionHeader} class so that
+     * attacker-controlled data from the "Session-Auth" header cannot be used
+     * to instantiate arbitrary classes.
+     */
+    private static class SessionHeaderObjectInputStream extends ObjectInputStream {
+        SessionHeaderObjectInputStream(InputStream in) throws IOException {
+            super(in);
+        }
+
+        @Override
+        protected Class<?> resolveClass(ObjectStreamClass osc) throws IOException, ClassNotFoundException {
+            if (!SessionHeader.class.getName().equals(osc.getName())) {
+                throw new InvalidClassException("Unauthorized deserialization attempt", osc.getName());
+            }
+            return super.resolveClass(osc);
+        }
     }
 
     @Override
@@ -57,12 +85,10 @@ public class UserServlet extends HttpServlet {
             List<String> users = db.findUsers(user);
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            users.forEach((result) -> {
-                out.print("<h2>User "+result+ "</h2>");
-            });
+            users.forEach(result -> out.print("<h2>User " + result + "</h2>"));
             out.close();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            sendInternalError(response);
         }
     }
 }

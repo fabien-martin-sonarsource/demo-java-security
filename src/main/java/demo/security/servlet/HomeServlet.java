@@ -2,7 +2,6 @@ package demo.security.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,17 +17,25 @@ public class HomeServlet extends HttpServlet {
     }
 
 
+    @Override
     protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) throws ServletException, IOException {
+                         HttpServletResponse response) {
         String name = request.getParameter("name").trim();
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.print("<h2>Hello "+name+ "</h2>");
-        out.close();
+        // text/plain prevents the browser from interpreting the reflected
+        // "name" value as HTML/JavaScript, which avoids reflected XSS.
+        response.setContentType("text/plain");
+        try {
+            PrintWriter out = response.getWriter();
+            out.print("Hello " + name);
+            out.close();
+        } catch (IOException e) {
+            // The response could not be written to; nothing more to do here.
+        }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response) {
         // TODO Auto-generated method stub
         doGet(request, response);
     }
