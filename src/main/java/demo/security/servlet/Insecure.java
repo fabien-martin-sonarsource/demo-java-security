@@ -8,8 +8,9 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +23,7 @@ public class Insecure {
   public void badFunction(HttpServletRequest request) throws IOException {
     String obj = request.getParameter("data");
     ObjectMapper mapper = new ObjectMapper();
-    mapper.enableDefaultTyping();
-    String val = mapper.readValue(obj, String.class);
+    mapper.readValue(obj, String.class);
     File tempDir;
     tempDir = File.createTempFile("", ".");
     tempDir.delete();
@@ -31,20 +31,26 @@ public class Insecure {
     Files.exists(Paths.get("/tmp/", obj));
   }
 
-  public String taintedSQL(HttpServletRequest request, Connection connection) throws Exception {
+  public String taintedSQL(HttpServletRequest request, Connection connection) throws SQLException {
     String user = request.getParameter("user");
-    String query = "SELECT userid FROM users WHERE username = '" + user  + "'";
-    Statement statement = connection.createStatement();
-    ResultSet resultSet = statement.executeQuery(query);
-    return resultSet.getString(0);
+    String query = "SELECT userid FROM users WHERE username = ?";
+    try (PreparedStatement statement = connection.prepareStatement(query)) {
+      statement.setString(1, user);
+      try (ResultSet resultSet = statement.executeQuery()) {
+        return resultSet.getString(1);
+      }
+    }
   }
   
-  public String hotspotSQL(Connection connection, String user) throws Exception {
-	  Statement statement = null;
-	  statement = connection.createStatement();
-	  ResultSet rs = statement.executeQuery("select userid from users WHERE username=" + user);
-	  return rs.getString(0);
-	}
+  public String hotspotSQL(Connection connection, String user) throws SQLException {
+    String query = "select userid from users WHERE username=?";
+    try (PreparedStatement statement = connection.prepareStatement(query)) {
+      statement.setString(1, user);
+      try (ResultSet rs = statement.executeQuery()) {
+        return rs.getString(1);
+      }
+    }
+  }
 
   // --------------------------------------------------------------------------
   // Custom sources, sanitizer and sinks example
