@@ -14,6 +14,14 @@ public class FileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String data = request.getParameter("data");
-        Utils.deleteFile(data);
+        try {
+            Utils.deleteFile(data);
+        } catch (IOException e) {
+            try {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to delete file");
+            } catch (IOException ignored) {
+                // response already failed, nothing more we can do
+            }
+        }
     }
 }
